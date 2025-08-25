@@ -26,6 +26,9 @@ cache = Cache(app)
 # Configuración DB usando variables de entorno
 def get_db_config():
     database_url = os.getenv('DATABASE_URL')
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is not set. Check Railway PostgreSQL service connection.")
+    
     # Parsear DATABASE_URL (Railway siempre la proporciona)
     parsed = urllib.parse.urlparse(database_url)
     return {
