@@ -37,13 +37,13 @@ def get_db_config():
             "password": parsed.password
         }
     else:
-        # Fallback a variables individuales
+        # Fallback a variables individuales de PostgreSQL estándar
         return {
-            "host": os.getenv('DB_HOST', 'localhost'),
-            "port": int(os.getenv('DB_PORT', 5432)),
-            "dbname": os.getenv('DB_NAME', 'railway'),
-            "user": os.getenv('DB_USER', 'postgres'),
-            "password": os.getenv('DB_PASSWORD')
+            "host": os.getenv('PGHOST', os.getenv('DB_HOST', 'localhost')),
+            "port": int(os.getenv('PGPORT', os.getenv('DB_PORT', 5432))),
+            "dbname": os.getenv('PGDATABASE', os.getenv('DB_NAME', 'railway')),
+            "user": os.getenv('PGUSER', os.getenv('DB_USER', 'postgres')),
+            "password": os.getenv('PGPASSWORD', os.getenv('DB_PASSWORD'))
         }
 
 # Inicializar DB_CONFIG de manera lazy para asegurar que las variables de entorno estén disponibles
