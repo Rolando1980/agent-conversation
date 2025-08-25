@@ -48,6 +48,11 @@ def get_db_connection_config():
         DB_CONFIG = get_db_config()
     return DB_CONFIG
 
+# Health check endpoint para Railway
+@app.route("/")
+def health_check():
+    return "OK", 200
+
 @app.route('/debug/env')
 def debug_env():
     """Endpoint para verificar variables de entorno de la base de datos"""
