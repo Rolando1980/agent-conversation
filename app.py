@@ -46,6 +46,34 @@ def get_db_config():
 
 DB_CONFIG = get_db_config()
 
+@app.route('/debug/env')
+def debug_env():
+    """Endpoint para verificar variables de entorno de la base de datos"""
+    env_vars = {
+        'DATABASE_URL': os.getenv('DATABASE_URL', 'NOT SET'),
+        'DB_HOST': os.getenv('DB_HOST', 'NOT SET'),
+        'DB_PORT': os.getenv('DB_PORT', 'NOT SET'),
+        'DB_NAME': os.getenv('DB_NAME', 'NOT SET'),
+        'DB_USER': os.getenv('DB_USER', 'NOT SET'),
+        'DB_PASSWORD': 'SET' if os.getenv('DB_PASSWORD') else 'NOT SET',
+        'RAILWAY_ENVIRONMENT': os.getenv('RAILWAY_ENVIRONMENT', 'NOT SET'),
+        'PORT': os.getenv('PORT', 'NOT SET')
+    }
+    
+    # Mostrar configuración actual de DB
+    try:
+        db_config = get_db_config()
+        db_config_safe = db_config.copy()
+        if 'password' in db_config_safe:
+            db_config_safe['password'] = 'SET' if db_config_safe['password'] else 'NOT SET'
+    except Exception as e:
+        db_config_safe = {'error': str(e)}
+    
+    return jsonify({
+        'environment_variables': env_vars,
+        'parsed_db_config': db_config_safe
+    })
+
 @app.route('/debug/<execution_id>')
 @cache.cached(timeout=300, key_prefix='debug_execution')  # Caché por 5 minutos
 def debug_execution(execution_id):
