@@ -7,7 +7,7 @@
   "deploy": {
     "startCommand": "python app.py",
     "healthcheckPath": "/",
-    "healthcheckTimeout": 100,
+    "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   },
@@ -16,6 +16,7 @@
       "variables": {
         "FLASK_ENV": "production",
         "FLASK_DEBUG": "False",
+        "RAILWAY_ENVIRONMENT": "production",
         "PORT": "$PORT"
       }
     }

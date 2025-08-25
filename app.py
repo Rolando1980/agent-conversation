@@ -1558,5 +1558,7 @@ def health_check():
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('FLASK_ENV') != 'production'
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    # Forzar debug=False en producción para Railway
+    is_production = os.getenv('FLASK_ENV') == 'production' or os.getenv('RAILWAY_ENVIRONMENT') == 'production'
+    debug = not is_production
+    app.run(host='0.0.0.0', port=port, debug=debug, use_reloader=False)
