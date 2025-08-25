@@ -18,7 +18,12 @@
         "FLASK_DEBUG": "False",
         "RAILWAY_ENVIRONMENT": "production",
         "PORT": "$PORT",
-        "DATABASE_URL": "${{ Postgres.DATABASE_URL }}"
+        "DATABASE_URL": "${{ Postgres.DATABASE_URL }}",
+        "DB_HOST": "${{ Postgres.PGHOST }}",
+        "DB_PORT": "${{ Postgres.PGPORT }}",
+        "DB_NAME": "${{ Postgres.PGDATABASE }}",
+        "DB_USER": "${{ Postgres.PGUSER }}",
+        "DB_PASSWORD": "${{ Postgres.PGPASSWORD }}"
       }
     }
   }
