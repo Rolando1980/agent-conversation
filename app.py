@@ -1558,7 +1558,8 @@ def health_check():
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    # Forzar debug=False siempre en Railway (detectar por PORT variable)
-    is_railway = os.getenv('PORT') is not None
-    debug = False if is_railway else True
+    # Forzar debug=False SIEMPRE para evitar debugger PIN en producción
+    # Solo habilitar debug en desarrollo local (puerto 5000)
+    debug = port == 5000
+    print(f"Starting Flask app on port {port}, debug={debug}")
     app.run(host='0.0.0.0', port=port, debug=debug, use_reloader=False, use_debugger=False)
