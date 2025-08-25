@@ -1546,5 +1546,17 @@ def clear_cache():
 
 
 
+# Ruta de healthcheck para Railway
+@app.route('/')
+def health_check():
+    """Endpoint de healthcheck para Railway"""
+    return jsonify({
+        "status": "healthy",
+        "message": "WhatsApp Business Bot is running",
+        "timestamp": datetime.now().isoformat()
+    })
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.getenv('PORT', 5000))
+    debug = os.getenv('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=port, debug=debug)
