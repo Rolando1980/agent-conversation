@@ -1575,15 +1575,7 @@ def clear_cache():
 
 
 
-# Ruta de healthcheck para Railway
-@app.route('/')
-def health_check():
-    """Endpoint de healthcheck para Railway"""
-    return jsonify({
-        "status": "healthy",
-        "message": "WhatsApp Business Bot is running",
-        "timestamp": datetime.now().isoformat()
-    })
+
 
 if __name__ == '__main__':
     # Solo ejecutar el servidor de desarrollo si se ejecuta directamente
