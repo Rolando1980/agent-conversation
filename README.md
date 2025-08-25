@@ -74,11 +74,43 @@ Sistema de agente conversacional inteligente para WhatsApp Business API que perm
 ```env
 FLASK_APP=app.py
 FLASK_ENV=development
+
+# Configuración de Base de Datos
+# IMPORTANTE: Railway optimizado para evitar cargos de egress
 DATABASE_URL=postgresql://usuario:password@host:puerto/database
+
+# Variables individuales (fallback)
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=railway
+DB_USER=postgres
+DB_PASSWORD=tu_password
+
+# WhatsApp Business API
 WHATSAPP_TOKEN=tu_whatsapp_token
 WHATSAPP_VERIFY_TOKEN=tu_verify_token
 WHATSAPP_PHONE_NUMBER_ID=tu_phone_number_id
 ```
+
+### 🚂 Optimización para Railway
+
+**⚠️ IMPORTANTE:** Para evitar cargos extra de egress en Railway:
+
+- **Conexión Privada:** Railway automáticamente proporciona `DATABASE_URL` con dominio privado
+- **Sin Cargos de Egress:** Las conexiones internas no generan costos adicionales
+- **Variables Automáticas:** Railway configura automáticamente las variables de entorno necesarias
+
+**En producción Railway:**
+```env
+# Railway proporciona automáticamente:
+DATABASE_URL=postgresql://postgres:password@railway-internal-domain:5432/railway
+RAILWAY_PRIVATE_DOMAIN=internal-domain.railway.internal
+```
+
+**Configuración incluida:**
+- `railway.json` - Configuración específica de despliegue
+- Variables de entorno optimizadas
+- Conexión de base de datos privada
 
 ## 🚀 Uso
 

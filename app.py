@@ -5,6 +5,11 @@ import os
 from datetime import datetime, timedelta
 from collections import defaultdict
 from flask_caching import Cache
+from dotenv import load_dotenv
+import urllib.parse
+
+# Cargar variables de entorno
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -16,14 +21,30 @@ app.config['CACHE_KEY_PREFIX'] = 'chat_app_'
 # Inicializar caché
 cache = Cache(app)
 
-# Configuración DB - ¡REEMPLAZA CON TUS DATOS REALES!
-DB_CONFIG = {
-    "host": "turntable.proxy.rlwy.net",
-    "port": 36174,
-    "dbname": "railway",
-    "user": "postgres",
-    "password": "VlgYYLNAqkPPUXAEKmeoPBhhuktnMoXm"  # CLAVE CRÍTICA
-}
+# Configuración DB usando variables de entorno
+def get_db_config():
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        # Parsear DATABASE_URL
+        parsed = urllib.parse.urlparse(database_url)
+        return {
+            "host": parsed.hostname,
+            "port": parsed.port,
+            "dbname": parsed.path[1:],  # Remover el '/' inicial
+            "user": parsed.username,
+            "password": parsed.password
+        }
+    else:
+        # Fallback a variables individuales
+        return {
+            "host": os.getenv('DB_HOST', 'localhost'),
+            "port": int(os.getenv('DB_PORT', 5432)),
+            "dbname": os.getenv('DB_NAME', 'railway'),
+            "user": os.getenv('DB_USER', 'postgres'),
+            "password": os.getenv('DB_PASSWORD')
+        }
+
+DB_CONFIG = get_db_config()
 
 @app.route('/debug/<execution_id>')
 @cache.cached(timeout=300, key_prefix='debug_execution')  # Caché por 5 minutos
