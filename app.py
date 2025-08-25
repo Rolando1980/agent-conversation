@@ -8,8 +8,10 @@ from flask_caching import Cache
 from dotenv import load_dotenv
 import urllib.parse
 
-# Cargar variables de entorno
-load_dotenv()
+# Cargar variables de entorno solo en desarrollo local
+# En Railway, las variables se proporcionan automáticamente
+if os.getenv('RAILWAY_ENVIRONMENT') is None:
+    load_dotenv()
 
 app = Flask(__name__)
 
@@ -44,7 +46,14 @@ def get_db_config():
             "password": os.getenv('DB_PASSWORD')
         }
 
-DB_CONFIG = get_db_config()
+# Inicializar DB_CONFIG de manera lazy para asegurar que las variables de entorno estén disponibles
+DB_CONFIG = None
+
+def get_db_connection_config():
+    global DB_CONFIG
+    if DB_CONFIG is None:
+        DB_CONFIG = get_db_config()
+    return DB_CONFIG
 
 @app.route('/debug/env')
 def debug_env():
@@ -60,24 +69,18 @@ def debug_env():
         'PORT': os.getenv('PORT', 'NOT SET')
     }
     
-    # Mostrar configuración actual de DB
-    try:
-        db_config = get_db_config()
-        db_config_safe = db_config.copy()
-        if 'password' in db_config_safe:
-            db_config_safe['password'] = 'SET' if db_config_safe['password'] else 'NOT SET'
-    except Exception as e:
-        db_config_safe = {'error': str(e)}
+    # Obtener configuración actual de DB
+    current_db_config = get_db_connection_config()
     
     return jsonify({
         'environment_variables': env_vars,
-        'parsed_db_config': db_config_safe
+        'current_db_config': current_db_config
     })
 
 @app.route('/debug/<execution_id>')
 @cache.cached(timeout=300, key_prefix='debug_execution')  # Caché por 5 minutos
 def debug_execution(execution_id):
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = psycopg2.connect(**get_db_connection_config())
     cur = conn.cursor()
     
     try:
@@ -167,7 +170,7 @@ def list_chats_internal(date_filter=None, show_all=False):
     if cached_result:
         return cached_result
     
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = psycopg2.connect(**get_db_connection_config())
     cur = conn.cursor()
     
     try:
@@ -314,7 +317,7 @@ def list_chats_internal(date_filter=None, show_all=False):
 @app.route('/chat/<execution_id>/<date_filter>')
 # @cache.cached(timeout=600, key_prefix='chat_detail')  # Temporalmente deshabilitado para debug
 def view_chat(execution_id, date_filter=None):
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = psycopg2.connect(**get_db_connection_config())
     cur = conn.cursor()
     
     try:
