@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - EMEMSA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #3a3a3a;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #3a3a3a;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 50px;
+            height: auto;
+        }
+
+        .welcome-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .signup-text {
+            color: #888888;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .signup-text a {
+            color: #4a9eff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4a9eff;
+            box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #666666;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: #4a9eff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .login-button:hover {
+            background: #3a8eef;
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #3a3a3a;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: #2a2a2a;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .help-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #3a3a3a;
+        }
+
+        .help-title {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .help-text {
+            color: #888888;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .help-text a {
+            color: #4a9eff;
+            text-decoration: none;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .welcome-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="https://ememsa.com/wp-content/uploads/2025/08/isotipo-ememsa.png" alt="EMEMSA Logo">
+            </div>
+            <h1 class="welcome-title">¡Bienvenido!</h1>
+            <p class="signup-text">¿Aún no tienes cuenta? <a href="#">Regístrate</a></p>
+        </div>
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="email address" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Password" name="password" required>
+            </div>
+            
+            <button type="submit" class="login-button">Login</button>
+        </form>
+
+        <div class="divider">
+            <span>O</span>
+        </div>
+
+        <div class="help-section">
+            <h3 class="help-title">¿Problemas para iniciar sesión?</h3>
+            <p class="help-text">
+                Si tienes inconvenientes con tu acceso, por favor escribe a 
+                <a href="mailto:rmartinez@ememsa.com">rmartinez@ememsa.com</a> 
+                y estará encantado de ayudarte.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

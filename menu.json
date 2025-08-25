@@ -1,0 +1,63 @@
+{
+    "messaging_product": "whatsapp",
+    "recipient_type": "individual",
+    "to": "{{ $json.from || $json.contacts?.[0]?.wa_id || $json.messages?.[0]?.from }}",
+    "type": "interactive",
+    "interactive": {
+      "type": "list",
+      "header": { "type": "text", "text": "Hola Bienvenido a Ememsa!" },
+      "body": { "text": "Soy tu asistente virtual 🤖. Para ayudarte mejor, elige una categoría:" },
+      "footer": { "text": "Por favor, selecciona una opción" },
+      "action": {
+        "button": "Ver opciones",
+        "sections": [
+          {
+            "title": "Categorías",
+            "rows": [
+              {
+                "id": "gas_natural",
+                "title": "🔥 Gas Natural",
+                "description": "Tuberías, accesorios y herramientas."
+              },
+              {
+                "id": "automotriz",
+                "title": "🚗 Automotriz",
+                "description": "Componentes para frenos, dirección y más."
+              },
+              {
+                "id": "construccion",
+                "title": "🏗️ Construcción",
+                "description": "Tuberías y herramientas para agua fría y caliente."
+              },
+              {
+                "id": "glp",
+                "title": "🛢️ Gas Licuado (GLP)",
+                "description": "Válvulas y accesorios para balones de gas."
+              },
+              {
+                "id": "conexiones",
+                "title": "🔧 Mangueras y Conexiones",
+                "description": "Mangueras industriales y conexiones de bronce"
+              },
+              {
+                "id": "laton_llaves",
+                "title": "🔑 Bronce, Latón y Llaves",
+                "description": "Barras de bronce, latón y llaves para cerraduras."
+              },
+              {
+                "id": "servicios",
+                "title": "⚙️ Servicios Industriales",
+                "description": "Montaje de estructuras y mantenimiento de equipos."
+              },
+              {
+                "id": "otro",
+                "title": "❓ Otro",
+                "description": "Otra consulta o categoría."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+  

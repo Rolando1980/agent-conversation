@@ -1,0 +1,118 @@
+{
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [200, 200],
+      "parameters": {
+        "operation": "read",
+        "sheetId": "TU_SHEET_ID",
+        "range": "Hoja1!A1:I",
+        "options": {
+          "valueRenderMode": "UNFORMATTED_VALUE"
+        }
+      },
+      "credentials": {
+        "googleApi": {
+          "id": "TU_CREDENCIAL_ID",
+          "name": "Google Account"
+        }
+      }
+    },
+    {
+      "id": "2",
+      "name": "Function Item (Map Data)",
+      "type": "n8n-nodes-base.functionItem",
+      "typeVersion": 1,
+      "position": [500, 200],
+      "parameters": {
+        "functionCode": "return {\n  codigo: $json[\"Codigo\"],\n  descripcion: $json[\"Descripcion\"],\n  precio: $json[\"Precio eCommerce\"],\n  stock: $json[\"Stock eCommerce\"],\n  texto: `${$json[\"Codigo\"]} ${$json[\"Descripcion\"]} ${$json[\"Precio eCommerce\"]} ${$json[\"Stock eCommerce\"]}`\n};"
+      }
+    },
+    {
+      "id": "3",
+      "name": "OpenAI Embedding",
+      "type": "n8n-nodes-base.openAiEmbedding",
+      "typeVersion": 1,
+      "position": [800, 200],
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "text": "={{ $json[\"texto\"] }}"
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "TU_CREDENCIAL_ID",
+          "name": "OpenAI Account"
+        }
+      }
+    },
+    {
+      "id": "4",
+      "name": "Supabase (Create Row)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1100, 200],
+      "parameters": {
+        "operation": "insert",
+        "table": "productos",
+        "columns": [
+          "codigo",
+          "descripcion",
+          "precio",
+          "stock",
+          "embedding"
+        ],
+        "values": [
+          "={{ $json[\"codigo\"] }}",
+          "={{ $json[\"descripcion\"] }}",
+          "={{ $json[\"precio\"] }}",
+          "={{ $json[\"stock\"] }}",
+          "={{ $json[\"embedding\"] }}"
+        ]
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "TU_CREDENCIAL_ID",
+          "name": "Supabase Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Function Item (Map Data)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function Item (Map Data)": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Embedding": {
+      "main": [
+        [
+          {
+            "node": "Supabase (Create Row)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

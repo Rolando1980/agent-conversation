@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversación</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #2d2d2d; color: #ffffff; }
+        .chat-container { max-width: 800px; margin: 0 auto; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 10px; }
+        .user-message { background: #e3f2fd; margin-left: 50px; color: #333333; }
+        .bot-message { background: #f5f5f5; margin-right: 50px; color: #333333; }
+        .message-header { font-weight: bold; font-size: 0.9em; margin-bottom: 5px; color: #333333; }
+        .message-time { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .chat-info { background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        a { color: #63b3ed; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        {% for chat in chats %}
+        <div class="chat-info">
+            <div style="text-align: left; padding-left: 10px;">
+                <h2 style="margin: 0 0 8px 0; font-weight: bold; font-size: 1.4em; color: #333333;">{{ chat.user_info.phone_number or 'No disponible' }}</h2>
+                {% if chat.user_info.user_name %}
+                <h3 style="margin: 0 0 8px 0; font-weight: normal; font-size: 1.1em; color: #555555;">{{ chat.user_info.user_name }}</h3>
+                {% endif %}
+                <p style="margin: 0 0 5px 0; font-size: 0.9em; color: #666666;">{{ chat.created.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p style="margin: 0; font-size: 0.9em; color: #666666;">Mensajes: {{ chat.messages|length }}</p>
+            </div>
+        </div>
+        
+        {% if chat.messages %}
+            {% for message in chat.messages %}
+            <div class="message {{ 'user-message' if message.sender == 'user' else 'bot-message' }}">
+                <div class="message-header">
+                    {{ '🙂 Usuario' if message.sender == 'user' else '🤖 Bot' }}
+                </div>
+                <div>{{ message.text }}</div>
+                <div class="message-time">
+                    {{ message.timestamp.strftime('%H:%M:%S') if message.timestamp else 'Sin hora' }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay mensajes en esta conversación.</p>
+        {% endif %}
+        {% endfor %}
+        
+        <hr>
+        <p><a href="{% if date_filter %}/chats/{{ date_filter }}{% else %}/chats{% endif %}">← Volver a la lista</a></p>
+    </div>
+</body>
+</html>
